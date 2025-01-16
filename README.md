@@ -34,28 +34,28 @@ You need to setup a webhook for your channel on Discord first.
 use Kirby\Discord\Discord;
 
 Discord::submit(
-	webhook: 'https://discord.com/api/webhooks/xxx/xxx',
-	username: 'kirbybot',
-	avatar: 'https://example.com/avatar.jpg',
-	title: '🔥 Message Title',
-	color: '#ebc747',
-	description: 'Here goes some nice text',
-	author: [
-		'name' => 'Ron Swanson',
-		'url'  => 'https://example.com',
-		'icon' => 'https://example.com/someicon.png'
-	],
-	fields: [
-		[
-			'name'  => 'This is a custom field',
-			'value' => 'Add any value here'
-		],
-		[
-			'name'  => 'This is another one',
-			'value' => 'https://canbeanurl.com'
-		],
-	],
-	footer: 'Some text for the footer'
+  webhook: 'https://discord.com/api/webhooks/xxx/xxx',
+  username: 'kirbybot',
+  avatar: 'https://example.com/avatar.jpg',
+  title: '🔥 Message Title',
+  color: '#ebc747',
+  description: 'Here goes some nice text',
+  author: [
+    'name' => 'Ron Swanson',
+    'url'  => 'https://example.com',
+    'icon' => 'https://example.com/someicon.png'
+  ],
+  fields: [
+    [
+      'name'  => 'This is a custom field',
+      'value' => 'Add any value here'
+    ],
+    [
+      'name'  => 'This is another one',
+      'value' => 'https://canbeanurl.com'
+    ],
+  ],
+  footer: 'Some text for the footer'
 );
 ```
 
@@ -65,17 +65,17 @@ Discord::submit(
 ```php
 // site/config/config.php
 return [
-	'discord' [
-		'mywebhook' => 'https://discord.com/api/webhooks/xxx/xxx'
-	]
+  'discord' [
+    'mywebhook' => 'https://discord.com/api/webhooks/xxx/xxx'
+  ]
 ];
 ```
 
 Access the webhook URL:
 ```php
 Discord::submit(
-	webhook: option('discord.mywebhook'),
-	// see additional params above
+  webhook: option('discord.mywebhook'),
+  // see additional params above
 );
 ```
 
