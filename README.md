@@ -22,6 +22,14 @@ composer require getkirby/discord
 
 ## How it works?
 
+You need to setup a webhook for your channel on Discord first.
+
+1. Click on the "Edit Channel" icon right next to the channel name in the sidebar
+2. Go to "Integrations"
+3. Go to "Webhooks"
+4. Create a new webhook
+5. Copy the webhook URL
+
 ```php
 use Kirby\Discord\Discord;
 
@@ -48,6 +56,26 @@ Discord::submit(
 		],
 	],
 	footer: 'Some text for the footer'
+);
+```
+
+> [!IMPORTANT]
+> Make sure to keep your webhook URL private. It's recommended to put it into the config and even better store it in an ENV variable.
+
+```php
+// site/config/config.php
+return [
+	'discord' [
+		'mywebhook' => 'https://discord.com/api/webhooks/xxx/xxx'
+	]
+];
+```
+
+Access the webhook URL:
+```php
+Discord::submit(
+	webhook: option('discord.mywebhook'),
+	// see additional params above
 );
 ```
 
