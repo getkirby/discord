@@ -1,6 +1,6 @@
 # Kirby Discord plugin
 
-A simple wrapper to send Discord webhooks
+A simple wrapper to send Discord channel webhooks
 
 ## Installation
 
