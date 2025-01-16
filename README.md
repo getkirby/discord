@@ -60,16 +60,18 @@ Discord::submit(
 ```
 
 > [!IMPORTANT]
-> Make sure to keep your webhook URL private. It's recommended to put it into the config and even better store it in an ENV variable.
+> Make sure to keep your webhook URL private. It's recommended to put it into a custom domain config that is not checked into git or store it in an ENV variable.
 
 ```php
-// site/config/config.php
+// site/config/config.mydomain.com.php
 return [
   'discord' [
     'mywebhook' => 'https://discord.com/api/webhooks/xxx/xxx'
   ]
 ];
 ```
+
+Add the custom domain config to your .gitignore and install it manually on your server.
 
 Access the webhook URL:
 ```php
