@@ -21,12 +21,9 @@ class Author
 	public static function from(self|array|null $author): static|null
 	{
 		return match (true) {
-			$author === null
-				=> null,
-			is_array($author)
-				=> new static(...$author),
-			default
-				=> $author
+			$author === null  => null,
+			is_array($author) => new static(...$author),
+			default           => $author
 		};
 	}
 
