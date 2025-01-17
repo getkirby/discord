@@ -26,4 +26,37 @@ describe('Discord', function () {
 			'username' => null,
 		]);
 	});
+
+	it('should have fields', function () {
+		$response = Discord::submit(
+			webhook: 'https://discord.com/api/webhooks/xxx/xxx',
+			fields: [
+				[
+					'name' => 'Field A',
+					'value' => 'Value A'
+				],
+				[
+					'name' => 'Field B',
+					'value' => 'Value B',
+					'inline' => true
+				]
+			],
+			dryrun: true
+		);
+
+		expect($response['embeds'][0]['fields'])->toBe([
+			[
+				'name' => 'Field A',
+				'value' => 'Value A',
+				'inline' => false
+			],
+			[
+				'name' => 'Field B',
+				'value' => 'Value B',
+				'inline' => true
+			]
+		]);
+
+	});
+
 });
