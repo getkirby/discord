@@ -5,3 +5,6 @@
 
 # Development files
 composer.lock export-ignore
+
+# Tests
+.php-cs-fixer.dist.php export-ignore
