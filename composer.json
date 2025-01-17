@@ -32,11 +32,16 @@
 	},
 	"config": {
 		"allow-plugins": {
-			"getkirby/composer-installer": true
+			"getkirby/composer-installer": true,
+			"pestphp/pest-plugin": true
 		},
 		"optimize-autoloader": true
 	},
 	"extra": {
-		"installer-name": "discord"
+		"installer-name": "discord",
+		"kirby-cms-path": false
+	},
+	"require-dev": {
+		"pestphp/pest": "^3.7"
 	}
 }

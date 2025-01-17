@@ -42,9 +42,9 @@ class Discord
 
 		$data = [
 			'avatar_url' => $avatar,
-			'username'   => $username,
 			'content'    => null,
 			'embeds'     => [$embed],
+			'username'   => $username,
 		];
 
 		if ($dryrun === true) {
