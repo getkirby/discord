@@ -20,7 +20,8 @@ describe('Discord', function () {
 					'fields'      => [],
 					'footer'      => ['text' => null],
 					'image'       => ['url' => null],
-					'title'       => null
+					'title'       => null,
+					'thumbnail'   => ['url' => null]
 				]
 			],
 			'username' => null,
@@ -67,6 +68,16 @@ describe('Discord', function () {
 			]
 		]);
 
+	});
+
+	it('should have a thumbnail', function () {
+		$response = Discord::submit(
+			webhook: 'https://discord.com/api/webhooks/xxx/xxx',
+			thumbnail: $thumb = 'https://example.com/thumb.jpg',
+			dryrun: true
+		);
+
+		expect($response['embeds'][0]['thumbnail']['url'])->toBe($thumb);
 	});
 
 });

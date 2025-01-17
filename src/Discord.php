@@ -24,6 +24,7 @@ class Discord
 		array $fields = [],
 		string|null $footer = null,
 		string|null $image = null,
+		string|null $thumbnail = null,
 		string|null $title = null,
 		string|null $username = null,
 	): Remote|array {
@@ -39,6 +40,7 @@ class Discord
 			'footer'      => ['text' => $footer],
 			'image'       => ['url'  => $image],
 			'title'       => $title,
+			'thumbnail'   => ['url'  => $thumbnail],
 		];
 
 		$data = [
