@@ -1,5 +1,8 @@
 # OS files
 .DS_Store
 
+# Cache files
+/.php-cs-fixer.cache
+
 # Vendor files
 /vendor
