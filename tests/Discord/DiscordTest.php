@@ -27,6 +27,16 @@ describe('Discord', function () {
 		]);
 	});
 
+	it('should have content', function () {
+		$response = Discord::submit(
+			webhook: 'https://discord.com/api/webhooks/xxx/xxx',
+			content: $content = 'This is some test content',
+			dryrun: true
+		);
+
+		expect($response['content'])->toBe($content);
+	});
+
 	it('should have fields', function () {
 		$response = Discord::submit(
 			webhook: 'https://discord.com/api/webhooks/xxx/xxx',

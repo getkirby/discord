@@ -16,6 +16,7 @@ class Discord
 	public static function submit(
 		string $webhook,
 		int|string|null $color = null,
+		string|null $content = null,
 		Author|array|null $author = null,
 		string|null $title = null,
 		string|null $description = null,
@@ -42,7 +43,7 @@ class Discord
 
 		$data = [
 			'avatar_url' => $avatar,
-			'content'    => null,
+			'content'    => $content,
 			'embeds'     => [$embed],
 			'username'   => $username,
 		];
