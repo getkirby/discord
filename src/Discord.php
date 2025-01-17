@@ -2,6 +2,7 @@
 
 namespace Kirby\Discord;
 
+use DateTime;
 use Kirby\Http\Remote;
 
 /**
@@ -25,11 +26,17 @@ class Discord
 		string|null $footer = null,
 		string|null $image = null,
 		string|null $thumbnail = null,
+		DateTime|string|null $timestamp = null,
 		string|null $title = null,
 		string|null $username = null,
 	): Remote|array {
 		if (is_string($color) === true) {
 			$color = hexdec(str_replace('#', '', $color));
+		}
+
+		// format the timestamp correctly
+		if ($timestamp instanceof DateTime) {
+			$timestamp = $timestamp->format('Y-m-d\TH:i:s.v\Z');
 		}
 
 		$embed = [
@@ -39,8 +46,9 @@ class Discord
 			'fields'      => array_map(fn ($field) => Field::from($field)->toArray(), $fields),
 			'footer'      => ['text' => $footer],
 			'image'       => ['url'  => $image],
-			'title'       => $title,
 			'thumbnail'   => ['url'  => $thumbnail],
+			'timestamp'   => $timestamp,
+			'title'       => $title,
 		];
 
 		$data = [

@@ -20,8 +20,9 @@ describe('Discord', function () {
 					'fields'      => [],
 					'footer'      => ['text' => null],
 					'image'       => ['url' => null],
+					'thumbnail'   => ['url' => null],
+					'timestamp'   => null,
 					'title'       => null,
-					'thumbnail'   => ['url' => null]
 				]
 			],
 			'username' => null,
@@ -78,6 +79,30 @@ describe('Discord', function () {
 		);
 
 		expect($response['embeds'][0]['thumbnail']['url'])->toBe($thumb);
+	});
+
+	describe('should have a timestamp', function () {
+
+		it('from string', function () {
+			$response = Discord::submit(
+				webhook: 'https://discord.com/api/webhooks/xxx/xxx',
+				timestamp: $ts = '2025-01-17T09:55:24.000Z',
+				dryrun: true
+			);
+
+			expect($response['embeds'][0]['timestamp'])->toBe($ts);
+		});
+
+		it('from DateTime object', function () {
+			$response = Discord::submit(
+				webhook: 'https://discord.com/api/webhooks/xxx/xxx',
+				timestamp: new DateTime('2025-01-01'),
+				dryrun: true
+			);
+
+			expect($response['embeds'][0]['timestamp'])->toBe('2025-01-01T00:00:00.000Z');
+		});
+
 	});
 
 });
