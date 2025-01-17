@@ -8,16 +8,16 @@ A simple wrapper to send Discord channel webhooks
 
 Download and copy this repository to `/site/plugins/discord`.
 
-### Git submodule
-
-```
-git submodule add https://github.com/getkirby/discord.git site/plugins/discord
-```
-
 ### Composer
 
 ```
 composer require getkirby/discord
+```
+
+### Git submodule
+
+```
+git submodule add https://github.com/getkirby/discord.git site/plugins/discord
 ```
 
 ## How it works?
