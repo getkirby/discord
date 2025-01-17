@@ -23,7 +23,8 @@ class Discord
 		array $fields = [],
 		string|null $footer = null,
 		string|null $username = null,
-		string|null $avatar = null
+		string|null $avatar = null,
+		bool $dryrun = false,
 	): Remote|array {
 		if (is_string($color) === true) {
 			$color = hexdec(str_replace('#', '', $color));
@@ -39,15 +40,21 @@ class Discord
 			'title'       => $title,
 		];
 
+		$data = [
+			'avatar_url' => $avatar,
+			'username'   => $username,
+			'content'    => null,
+			'embeds'     => [$embed],
+		];
+
+		if ($dryrun === true) {
+			return $data;
+		}
+
 		return Remote::post(
 			$webhook,
 			[
-				'data'    => json_encode([
-					'avatar_url' => $avatar,
-					'username'   => $username,
-					'content'    => null,
-					'embeds'     => [$embed],
-				]),
+				'data'    => json_encode($data),
 				'headers' => ['Content-Type' => 'application/json'],
 			]
 		);
