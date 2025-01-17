@@ -59,6 +59,8 @@ Discord::submit(
 );
 ```
 
+Check out this awesome webhook embed visualizer https://leovoel.github.io/embed-visualizer/ to get an idea what each parameter does. 
+
 > [!IMPORTANT]
 > Make sure to keep your webhook URL private. It's recommended to put it into a custom domain config that is not checked into git or store it in an ENV variable.
 
