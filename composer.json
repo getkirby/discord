@@ -3,6 +3,7 @@
 	"description": "Simple Discord webhook wrapper",
 	"license": "MIT",
 	"type": "kirby-plugin",
+	"version": "1.1.0",
 	"keywords": [
 		"kirby",
 		"kirby4",
@@ -46,6 +47,7 @@
 		"friendsofphp/php-cs-fixer": "^3.68"
 	},
 	"scripts": {
-		"fix": "./vendor/bin/php-cs-fixer fix"
+		"fix": "./vendor/bin/php-cs-fixer fix",
+		"test": "./vendor/bin/pest"
 	}
 }
