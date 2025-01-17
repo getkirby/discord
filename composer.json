@@ -31,8 +31,16 @@
 		"getkirby/cms": "^4.0.0",
 		"getkirby/composer-installer": "^1.2.1"
 	},
+	"require-dev": {
+		"ergebnis/composer-normalize": "^2.45",
+		"friendsofphp/php-cs-fixer": "^3.68",
+		"pestphp/pest": "^3.7",
+		"phpmd/phpmd": "^2.15",
+		"psalm/phar": "^5.26"
+	},
 	"config": {
 		"allow-plugins": {
+			"ergebnis/composer-normalize": true,
 			"getkirby/composer-installer": true,
 			"pestphp/pest-plugin": true
 		},
@@ -42,20 +50,16 @@
 		"installer-name": "discord",
 		"kirby-cms-path": false
 	},
-	"require-dev": {
-		"pestphp/pest": "^3.7",
-		"friendsofphp/php-cs-fixer": "^3.68",
-		"phpmd/phpmd": "^2.15",
-		"psalm/phar": "^5.26"
-	},
 	"scripts": {
 		"analyze": [
-			"@analyze:composer",
+			"@analyze:composer:normalize",
+			"@analyze:composer:validate",
 			"@analyze:fix",
 			"@analyze:phpmd",
 			"@analyze:psalm"
 		],
-		"analyze:composer": "composer validate --strict --no-check-version --no-check-all",
+		"analyze:composer:normalize": "composer normalize --dry-run",
+		"analyze:composer:validate": "composer validate --strict --no-check-version --no-check-all",
 		"analyze:fix": "./vendor/bin/php-cs-fixer fix --diff --dry-run",
 		"analyze:phpmd": "./vendor/bin/phpmd . ansi phpmd.xml --exclude 'tests/*,vendor/*'",
 		"analyze:psalm": "./vendor/bin/psalm.phar",
