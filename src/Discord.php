@@ -34,7 +34,7 @@ class Discord
 			'author'      => Author::from($author)?->toArray(),
 			'color'       => $color,
 			'description' => $description,
-			'fields'      => array_map(fn ($field) => Field::from($field), $fields),
+			'fields'      => array_map(fn ($field) => Field::from($field)->toArray(), $fields),
 			'footer'      => ['text' => $footer],
 			'image'       => ['url'  => $image],
 			'title'       => $title,
