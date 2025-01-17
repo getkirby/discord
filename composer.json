@@ -51,10 +51,12 @@
 	"scripts": {
 		"analyze": [
 			"@analyze:composer",
+			"@analyze:fix",
 			"@analyze:phpmd",
 			"@analyze:psalm"
 		],
 		"analyze:composer": "composer validate --strict --no-check-version --no-check-all",
+		"analyze:fix": "./vendor/bin/php-cs-fixer fix --diff --dry-run",
 		"analyze:phpmd": "./vendor/bin/phpmd . ansi phpmd.xml --exclude 'tests/*,vendor/*'",
 		"analyze:psalm": "./vendor/bin/psalm.phar",
 		"fix": "./vendor/bin/php-cs-fixer fix",
