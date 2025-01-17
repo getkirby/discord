@@ -48,6 +48,10 @@
 		"phpmd/phpmd": "^2.15"
 	},
 	"scripts": {
+		"analyze": [
+			"@analyze:composer",
+			"@analyze:phpmd"
+		],
 		"analyze:composer": "composer validate --strict --no-check-version --no-check-all",
 		"analyze:phpmd": "./vendor/bin/phpmd . ansi phpmd.xml --exclude 'tests/*,vendor/*'",
 		"fix": "./vendor/bin/php-cs-fixer fix",
