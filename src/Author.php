@@ -13,8 +13,8 @@ class Author
 {
 	public function __construct(
 		public string $name,
-		public string|null $url,
-		public string|null $icon
+		public string|null $url = null,
+		public string|null $icon = null
 	) {
 	}
 
@@ -30,9 +30,9 @@ class Author
 	public function toArray(): array
 	{
 		return [
+			'icon_url'  => $this->icon,
 			'name'      => $this->name,
 			'url'       => $this->url,
-			'icon_url'  => $this->icon
 		];
 	}
 }
