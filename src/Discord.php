@@ -15,17 +15,17 @@ class Discord
 {
 	public static function submit(
 		string $webhook,
+		Author|array|null $author = null,
+		string|null $avatar = null,
 		int|string|null $color = null,
 		string|null $content = null,
-		Author|array|null $author = null,
-		string|null $title = null,
 		string|null $description = null,
-		string|null $image = null,
+		bool $dryrun = false,
 		array $fields = [],
 		string|null $footer = null,
+		string|null $image = null,
+		string|null $title = null,
 		string|null $username = null,
-		string|null $avatar = null,
-		bool $dryrun = false,
 	): Remote|array {
 		if (is_string($color) === true) {
 			$color = hexdec(str_replace('#', '', $color));
