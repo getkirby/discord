@@ -47,6 +47,7 @@
 		"friendsofphp/php-cs-fixer": "^3.68"
 	},
 	"scripts": {
+		"analyze:composer": "composer validate --strict --no-check-version --no-check-all",
 		"fix": "./vendor/bin/php-cs-fixer fix",
 		"test": "./vendor/bin/pest"
 	}
