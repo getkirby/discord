@@ -61,6 +61,25 @@ class DiscordTest extends TestCase
 		$this->assertSame([], $response);
 	}
 
+	public function testSubmitTimeout(): void
+	{
+		$response = Discord::submit(
+			webhook: static::WEBHOOK,
+			title: 'Test'
+		);
+
+		// falls back to Kirby's default timeout
+		$this->assertSame(Remote::$defaults['timeout'], $response->options['timeout']);
+
+		$response = Discord::submit(
+			webhook: static::WEBHOOK,
+			timeout: 3,
+			title: 'Test'
+		);
+
+		$this->assertSame(3, $response->options['timeout']);
+	}
+
 	public function testSubmitWithAuthorArray(): void
 	{
 		$response = Discord::submit(

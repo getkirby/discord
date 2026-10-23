@@ -50,6 +50,8 @@ class Discord
 	 *
 	 * @param Author|array{name: string, url?: string|null, icon?: string|null}|null $author
 	 * @param array<Field|array{name: string, value: mixed, inline?: bool}> $fields
+	 * @param $timeout Seconds to wait for Discord; defaults to Kirby's `remote.timeout` option
+	 * @throws \Exception when the request fails or times out
 	 */
 	public static function submit(
 		string $webhook,
@@ -63,6 +65,7 @@ class Discord
 		string|null $footer = null,
 		string|null $image = null,
 		string|null $thumbnail = null,
+		int|null $timeout = null,
 		DateTime|string|null $timestamp = null,
 		string|null $title = null,
 		string|null $username = null,
@@ -108,13 +111,17 @@ class Discord
 			return $data;
 		}
 
-		return Remote::request(
-			$webhook,
-			[
-				'data'    => json_encode($data),
-				'headers' => ['Content-Type' => 'application/json'],
-				'method'  => 'POST',
-			]
-		);
+		$options = [
+			'data'    => json_encode($data),
+			'headers' => ['Content-Type' => 'application/json'],
+			'method'  => 'POST',
+		];
+
+		// only override the timeout of the `remote` option if requested
+		if ($timeout !== null) {
+			$options['timeout'] = $timeout;
+		}
+
+		return Remote::request($webhook, $options);
 	}
 }

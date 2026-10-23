@@ -113,6 +113,7 @@ Discord::submit(
 | `thumbnail`   | `string`             | URL of a small image in the top right corner                                        |
 | `footer`      | `string`             | Text at the bottom of the embed                                                     |
 | `timestamp`   | `string\|DateTime`   | Time next to the footer, as ISO 8601 string or `DateTime` object                    |
+| `timeout`     | `int`                | Seconds to wait for Discord's answer, defaults to Kirby's `remote.timeout` option   |
 | `dryrun`      | `bool`               | Returns the request data as array instead of sending it                             |
 
 To get an idea of what each parameter does, check out this [embed visualizer](https://leovoel.github.io/embed-visualizer/).
