@@ -87,6 +87,17 @@ class DiscordTest extends TestCase
 		$this->assertSame($avatar, $response['avatar_url']);
 	}
 
+	public function testSubmitWithColor(): void
+	{
+		$response = Discord::submit(
+			webhook: static::WEBHOOK,
+			color: '#ebc747',
+			dryrun: true
+		);
+
+		$this->assertSame(0xebc747, $response['embeds'][0]['color']);
+	}
+
 	public function testSubmitWithContent(): void
 	{
 		$response = Discord::submit(
