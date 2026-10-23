@@ -4,6 +4,7 @@
 .gitignore export-ignore
 
 # Development files
+.editorconfig export-ignore
 composer.lock export-ignore
 
 # Tests
