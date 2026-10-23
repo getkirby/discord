@@ -47,24 +47,7 @@ class DiscordTest extends TestCase
 			dryrun: true
 		);
 
-		$this->assertSame([
-			'avatar_url' => null,
-			'content'    => null,
-			'embeds'     => [
-				[
-					'author'      => null,
-					'color'       => null,
-					'description' => null,
-					'fields'      => [],
-					'footer'      => ['text' => null],
-					'image'       => ['url' => null],
-					'thumbnail'   => ['url' => null],
-					'timestamp'   => null,
-					'title'       => null,
-				]
-			],
-			'username' => null,
-		], $response);
+		$this->assertSame([], $response);
 	}
 
 	public function testSubmitWithAuthorArray(): void
@@ -136,6 +119,9 @@ class DiscordTest extends TestCase
 		);
 
 		$this->assertSame($content, $response['content']);
+
+		// a message without embed content gets no empty embed
+		$this->assertArrayNotHasKey('embeds', $response);
 	}
 
 	public function testSubmitWithDescription(): void
@@ -147,6 +133,32 @@ class DiscordTest extends TestCase
 		);
 
 		$this->assertSame($description, $response['embeds'][0]['description']);
+	}
+
+	public function testSubmitWithEmptyValues(): void
+	{
+		$response = Discord::submit(
+			webhook: static::WEBHOOK,
+			author: ['name' => 'Test author', 'url' => '', 'icon' => null],
+			avatar: '',
+			content: ' ',
+			description: '',
+			footer: '',
+			image: '',
+			thumbnail: '',
+			timestamp: '',
+			title: '',
+			username: '',
+			dryrun: true
+		);
+
+		$this->assertSame([
+			'embeds' => [
+				[
+					'author' => ['name' => 'Test author']
+				]
+			]
+		], $response);
 	}
 
 	public function testSubmitWithFields(): void

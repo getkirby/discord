@@ -15,6 +15,21 @@ use Kirby\Http\Remote;
 class Discord
 {
 	/**
+	 * Removes the parts without content from the request data
+	 */
+	protected static function filter(array $data): array
+	{
+		return array_filter(
+			$data,
+			fn ($value) => match (true) {
+				is_string($value) => trim($value) !== '',
+				is_array($value)  => $value !== [],
+				default           => $value !== null
+			}
+		);
+	}
+
+	/**
 	 * Sends a message with an embed to the webhook;
 	 * returns the request data instead in dryrun mode
 	 *
@@ -49,24 +64,24 @@ class Discord
 				->format('Y-m-d\TH:i:s.v\Z');
 		}
 
-		$embed = [
-			'author'      => Author::from($author)?->toArray(),
+		$embed = static::filter([
+			'author'      => static::filter(Author::from($author)?->toArray() ?? []),
 			'color'       => $color,
 			'description' => $description,
 			'fields'      => array_map(fn ($field) => Field::from($field)->toArray(), $fields),
-			'footer'      => ['text' => $footer],
-			'image'       => ['url'  => $image],
-			'thumbnail'   => ['url'  => $thumbnail],
+			'footer'      => static::filter(['text' => $footer]),
+			'image'       => static::filter(['url'  => $image]),
+			'thumbnail'   => static::filter(['url'  => $thumbnail]),
 			'timestamp'   => $timestamp,
 			'title'       => $title,
-		];
+		]);
 
-		$data = [
+		$data = static::filter([
 			'avatar_url' => $avatar,
 			'content'    => $content,
-			'embeds'     => [$embed],
+			'embeds'     => $embed !== [] ? [$embed] : null,
 			'username'   => $username,
-		];
+		]);
 
 		if ($dryrun === true) {
 			return $data;
