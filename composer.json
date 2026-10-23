@@ -33,8 +33,7 @@
 	},
 	"require-dev": {
 		"getkirby/cms": "^5.6",
-		"pestphp/pest": "^3.7",
-		"psalm/phar": "^5.26"
+		"pestphp/pest": "^3.7"
 	},
 	"config": {
 		"allow-plugins": {
@@ -56,7 +55,7 @@
 			"@analyze:psalm"
 		],
 		"analyze:composer": "composer validate --strict --no-check-version --no-check-all",
-		"analyze:psalm": "./vendor/bin/psalm.phar",
+		"analyze:psalm": "cpx vimeo/psalm:6.20.1",
 		"ci": [
 			"@fix",
 			"@analyze",
