@@ -101,10 +101,12 @@ class Discord
 		]);
 
 		$data = static::filter([
-			'avatar_url' => $avatar,
-			'content'    => static::shorten($content, 2000),
-			'embeds'     => $embed !== [] ? [$embed] : null,
-			'username'   => static::shorten($username, 80),
+			// don't let mentions in the content ping anyone
+			'allowed_mentions' => ['parse' => []],
+			'avatar_url'       => $avatar,
+			'content'          => static::shorten($content, 2000),
+			'embeds'           => $embed !== [] ? [$embed] : null,
+			'username'         => static::shorten($username, 80),
 		]);
 
 		if ($dryrun === true) {

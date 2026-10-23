@@ -58,7 +58,9 @@ class DiscordTest extends TestCase
 			dryrun: true
 		);
 
-		$this->assertSame([], $response);
+		$this->assertSame([
+			'allowed_mentions' => ['parse' => []]
+		], $response);
 	}
 
 	public function testSubmitTimeout(): void
@@ -183,7 +185,8 @@ class DiscordTest extends TestCase
 		);
 
 		$this->assertSame([
-			'embeds' => [
+			'allowed_mentions' => ['parse' => []],
+			'embeds'           => [
 				[
 					'author' => ['name' => 'Test author']
 				]
@@ -302,6 +305,18 @@ class DiscordTest extends TestCase
 		$this->assertSame(str_repeat('a', 1023) . '…', $embed['fields'][0]['value']);
 		$this->assertSame(str_repeat('a', 2047) . '…', $embed['footer']['text']);
 		$this->assertSame(str_repeat('a', 255) . '…', $embed['title']);
+	}
+
+	public function testSubmitWithMentions(): void
+	{
+		$response = Discord::submit(
+			webhook: static::WEBHOOK,
+			content: '@everyone',
+			dryrun: true
+		);
+
+		// mentions must not ping anyone
+		$this->assertSame(['parse' => []], $response['allowed_mentions']);
 	}
 
 	public function testSubmitWithThumbnail(): void
