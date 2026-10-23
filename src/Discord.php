@@ -3,6 +3,7 @@
 namespace Kirby\Discord;
 
 use DateTime;
+use DateTimeZone;
 use Kirby\Http\Remote;
 
 /**
@@ -37,9 +38,12 @@ class Discord
 			$color = hexdec(str_replace('#', '', $color));
 		}
 
-		// format the timestamp correctly
+		// Discord expects the timestamp in UTC;
+		// convert a copy to keep the passed object intact
 		if ($timestamp instanceof DateTime) {
-			$timestamp = $timestamp->format('Y-m-d\TH:i:s.v\Z');
+			$timestamp = (clone $timestamp)
+				->setTimezone(new DateTimeZone('UTC'))
+				->format('Y-m-d\TH:i:s.v\Z');
 		}
 
 		$embed = [

@@ -3,6 +3,7 @@
 namespace Kirby\Discord;
 
 use DateTime;
+use DateTimeZone;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
@@ -194,6 +195,22 @@ class DiscordTest extends TestCase
 		);
 
 		$this->assertSame('2025-01-01T00:00:00.000Z', $response['embeds'][0]['timestamp']);
+	}
+
+	public function testSubmitWithTimestampObjectInOtherTimezone(): void
+	{
+		$timestamp = new DateTime('2025-01-01 01:00:00', new DateTimeZone('Europe/Berlin'));
+
+		$response = Discord::submit(
+			webhook: static::WEBHOOK,
+			timestamp: $timestamp,
+			dryrun: true
+		);
+
+		$this->assertSame('2025-01-01T00:00:00.000Z', $response['embeds'][0]['timestamp']);
+
+		// the passed object must not be changed
+		$this->assertSame('Europe/Berlin', $timestamp->getTimezone()->getName());
 	}
 
 	public function testSubmitWithTimestampString(): void
