@@ -119,7 +119,7 @@ To get an idea of what each parameter does, check out this [embed visualizer](ht
 
 ### Author icon from Gravatar
 
-`Author::gravatar()` returns the Gravatar URL for an email address. The optional second argument sets Gravatar's fallback image for addresses without an avatar, e.g. `mp` or `identicon`:
+`Author::gravatar()` returns the Gravatar URL for an email address. The optional second argument sets Gravatar's fallback image for addresses without an avatar, e.g. `mp`, `identicon` or the URL of your own image:
 
 ```php
 use Kirby\Discord\Author;
