@@ -18,6 +18,15 @@ class Author
 	) {
 	}
 
+	public static function from(self|array|null $author): static|null
+	{
+		return match (true) {
+			$author === null  => null,
+			is_array($author) => new static(...$author),
+			default           => $author
+		};
+	}
+
 	public static function gravatar(
 		string $email,
 		string|null $default = null
@@ -26,15 +35,6 @@ class Author
 		$hash    = hash('sha256', $address);
 
 		return 'https://www.gravatar.com/avatar/' . $hash . '?d=' . $default;
-	}
-
-	public static function from(self|array|null $author): static|null
-	{
-		return match (true) {
-			$author === null  => null,
-			is_array($author) => new static(...$author),
-			default           => $author
-		};
 	}
 
 	public function toArray(): array
