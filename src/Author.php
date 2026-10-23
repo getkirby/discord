@@ -5,9 +5,8 @@ namespace Kirby\Discord;
 /**
  * Author information for a Discord webhook request
  *
- * @author Kirby Team <mail@getkirby.com>
- * @license MIT
- * @link https://getkirby.com
+ * @copyright Kirby Team <mail@getkirby.com>
+ * @license   https://opensource.org/licenses/MIT
  */
 class Author
 {
@@ -18,6 +17,12 @@ class Author
 	) {
 	}
 
+	/**
+	 * Creates an author from an array of constructor arguments
+	 * or passes through an existing author object
+	 *
+	 * @param self|array{name: string, url?: string|null, icon?: string|null}|null $author
+	 */
 	public static function from(self|array|null $author): static|null
 	{
 		return match (true) {
@@ -27,6 +32,23 @@ class Author
 		};
 	}
 
+	/**
+	 * Returns the Gravatar URL for an email address,
+	 * e.g. to use it as author icon
+	 */
+	public static function gravatar(
+		string $email,
+		string|null $default = null
+	): string {
+		$address = strtolower(trim($email));
+		$hash    = hash('sha256', $address);
+
+		return 'https://www.gravatar.com/avatar/' . $hash . '?d=' . rawurlencode($default ?? '');
+	}
+
+	/**
+	 * Converts the author to the format of the Discord API
+	 */
 	public function toArray(): array
 	{
 		return [

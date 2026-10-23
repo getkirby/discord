@@ -5,9 +5,8 @@ namespace Kirby\Discord;
 /**
  * Field information for a Discord webhook request
  *
- * @author Kirby Team <mail@getkirby.com>
- * @license MIT
- * @link https://getkirby.com
+ * @copyright Kirby Team <mail@getkirby.com>
+ * @license   https://opensource.org/licenses/MIT
  */
 class Field
 {
@@ -18,7 +17,13 @@ class Field
 	) {
 	}
 
-	public static function from(self|array $field): static|null
+	/**
+	 * Creates a field from an array of constructor arguments
+	 * or passes through an existing field object
+	 *
+	 * @param self|array{name: string, value: mixed, inline?: bool} $field
+	 */
+	public static function from(self|array $field): static
 	{
 		return match (true) {
 			is_array($field) => new static(...$field),
@@ -26,6 +31,9 @@ class Field
 		};
 	}
 
+	/**
+	 * Converts the field to the format of the Discord API
+	 */
 	public function toArray(): array
 	{
 		return [

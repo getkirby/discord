@@ -3,17 +3,24 @@
 namespace Kirby\Discord;
 
 use DateTime;
+use DateTimeZone;
 use Kirby\Http\Remote;
 
 /**
  * Sends a webhook to a Discord channel
  *
- * @author Kirby Team <mail@getkirby.com>
- * @license MIT
- * @link https://getkirby.com
+ * @copyright Kirby Team <mail@getkirby.com>
+ * @license   https://opensource.org/licenses/MIT
  */
 class Discord
 {
+	/**
+	 * Sends a message with an embed to the webhook;
+	 * returns the request data instead in dryrun mode
+	 *
+	 * @param Author|array{name: string, url?: string|null, icon?: string|null}|null $author
+	 * @param array<Field|array{name: string, value: mixed, inline?: bool}> $fields
+	 */
 	public static function submit(
 		string $webhook,
 		Author|array|null $author = null,
@@ -34,9 +41,12 @@ class Discord
 			$color = hexdec(str_replace('#', '', $color));
 		}
 
-		// format the timestamp correctly
+		// Discord expects the timestamp in UTC;
+		// convert a copy to keep the passed object intact
 		if ($timestamp instanceof DateTime) {
-			$timestamp = $timestamp->format('Y-m-d\TH:i:s.v\Z');
+			$timestamp = (clone $timestamp)
+				->setTimezone(new DateTimeZone('UTC'))
+				->format('Y-m-d\TH:i:s.v\Z');
 		}
 
 		$embed = [
@@ -62,11 +72,12 @@ class Discord
 			return $data;
 		}
 
-		return Remote::post(
+		return Remote::request(
 			$webhook,
 			[
 				'data'    => json_encode($data),
 				'headers' => ['Content-Type' => 'application/json'],
+				'method'  => 'POST',
 			]
 		);
 	}

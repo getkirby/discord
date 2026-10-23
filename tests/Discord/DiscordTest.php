@@ -1,16 +1,53 @@
 <?php
 
-use Kirby\Discord\Author;
-use Kirby\Discord\Discord;
+namespace Kirby\Discord;
 
-describe('Discord', function () {
-	it('should return an array on dryrun', function () {
+use DateTime;
+use DateTimeZone;
+use Kirby\Http\Remote;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+
+#[CoversClass(Discord::class)]
+class DiscordTest extends TestCase
+{
+	protected const string WEBHOOK = 'https://discord.com/api/webhooks/xxx/xxx';
+
+	protected function setUp(): void
+	{
+		// prepare requests without sending them
+		Remote::$defaults['test'] = true;
+	}
+
+	protected function tearDown(): void
+	{
+		Remote::$defaults['test'] = false;
+	}
+
+	public function testSubmit(): void
+	{
 		$response = Discord::submit(
-			webhook: 'https://discord.com/api/webhooks/xxx/xxx',
+			webhook: static::WEBHOOK,
+			title: 'Test'
+		);
+
+		$this->assertInstanceOf(Remote::class, $response);
+		$this->assertSame('POST', $response->options['method']);
+		$this->assertSame(static::WEBHOOK, $response->options['url']);
+		$this->assertSame(['Content-Type' => 'application/json'], $response->options['headers']);
+
+		$data = json_decode($response->options['data'], true);
+		$this->assertSame('Test', $data['embeds'][0]['title']);
+	}
+
+	public function testSubmitDryrun(): void
+	{
+		$response = Discord::submit(
+			webhook: static::WEBHOOK,
 			dryrun: true
 		);
 
-		expect($response)->toBe([
+		$this->assertSame([
 			'avatar_url' => null,
 			'content'    => null,
 			'embeds'     => [
@@ -27,178 +64,213 @@ describe('Discord', function () {
 				]
 			],
 			'username' => null,
-		]);
-	});
+		], $response);
+	}
 
-	describe('should have an author', function () {
-		it('should be creatable from array', function () {
-			$response = Discord::submit(
-				webhook: 'https://discord.com/api/webhooks/xxx/xxx',
-				author: $author = [
-					'icon' => 'https://getkirby.com/icon.png',
-					'name' => 'Test author',
-					'url'  => 'https://getkirby.com'
-				],
-				dryrun: true
-			);
-
-			expect($response['embeds'][0]['author'])->toBe([
-				'icon_url' => $author['icon'],
-				'name'     => $author['name'],
-				'url'      => $author['url']
-			]);
-		});
-
-		it('should be creatable from object', function () {
-			$response = Discord::submit(
-				webhook: 'https://discord.com/api/webhooks/xxx/xxx',
-				author: $author = new Author(
-					icon: 'https://getkirby.com/icon.png',
-					name: 'Test author',
-					url: 'https://getkirby.com'
-				),
-				dryrun: true
-			);
-
-			expect($response['embeds'][0]['author'])->toBe([
-				'icon_url' => $author->icon,
-				'name'     => $author->name,
-				'url'      => $author->url
-			]);
-		});
-	});
-
-	it('should have an avatar', function () {
+	public function testSubmitWithAuthorArray(): void
+	{
 		$response = Discord::submit(
-			webhook: 'https://discord.com/api/webhooks/xxx/xxx',
+			webhook: static::WEBHOOK,
+			author: $author = [
+				'icon' => 'https://getkirby.com/icon.png',
+				'name' => 'Test author',
+				'url'  => 'https://getkirby.com'
+			],
+			dryrun: true
+		);
+
+		$this->assertSame([
+			'icon_url' => $author['icon'],
+			'name'     => $author['name'],
+			'url'      => $author['url']
+		], $response['embeds'][0]['author']);
+	}
+
+	public function testSubmitWithAuthorObject(): void
+	{
+		$response = Discord::submit(
+			webhook: static::WEBHOOK,
+			author: $author = new Author(
+				icon: 'https://getkirby.com/icon.png',
+				name: 'Test author',
+				url: 'https://getkirby.com'
+			),
+			dryrun: true
+		);
+
+		$this->assertSame([
+			'icon_url' => $author->icon,
+			'name'     => $author->name,
+			'url'      => $author->url
+		], $response['embeds'][0]['author']);
+	}
+
+	public function testSubmitWithAvatar(): void
+	{
+		$response = Discord::submit(
+			webhook: static::WEBHOOK,
 			avatar: $avatar = 'https://example.com/avatar.jpg',
 			dryrun: true
 		);
 
-		expect($response['avatar_url'])->toBe($avatar);
-	});
+		$this->assertSame($avatar, $response['avatar_url']);
+	}
 
-	it('should have content', function () {
+	public function testSubmitWithColor(): void
+	{
 		$response = Discord::submit(
-			webhook: 'https://discord.com/api/webhooks/xxx/xxx',
+			webhook: static::WEBHOOK,
+			color: '#ebc747',
+			dryrun: true
+		);
+
+		$this->assertSame(0xebc747, $response['embeds'][0]['color']);
+	}
+
+	public function testSubmitWithContent(): void
+	{
+		$response = Discord::submit(
+			webhook: static::WEBHOOK,
 			content: $content = 'This is some test content',
 			dryrun: true
 		);
 
-		expect($response['content'])->toBe($content);
-	});
+		$this->assertSame($content, $response['content']);
+	}
 
-	it('should have a description', function () {
+	public function testSubmitWithDescription(): void
+	{
 		$response = Discord::submit(
-			webhook: 'https://discord.com/api/webhooks/xxx/xxx',
+			webhook: static::WEBHOOK,
 			description: $description = 'Test Description',
 			dryrun: true
 		);
 
-		expect($response['embeds'][0]['description'])->toBe($description);
-	});
+		$this->assertSame($description, $response['embeds'][0]['description']);
+	}
 
-	it('should have fields', function () {
+	public function testSubmitWithFields(): void
+	{
 		$response = Discord::submit(
-			webhook: 'https://discord.com/api/webhooks/xxx/xxx',
+			webhook: static::WEBHOOK,
 			fields: [
 				[
-					'name' => 'Field A',
+					'name'  => 'Field A',
 					'value' => 'Value A'
 				],
 				[
-					'name' => 'Field B',
-					'value' => 'Value B',
+					'name'   => 'Field B',
+					'value'  => 'Value B',
 					'inline' => true
 				]
 			],
 			dryrun: true
 		);
 
-		expect($response['embeds'][0]['fields'])->toBe([
+		$this->assertSame([
 			[
-				'name' => 'Field A',
-				'value' => 'Value A',
+				'name'   => 'Field A',
+				'value'  => 'Value A',
 				'inline' => false
 			],
 			[
-				'name' => 'Field B',
-				'value' => 'Value B',
+				'name'   => 'Field B',
+				'value'  => 'Value B',
 				'inline' => true
 			]
-		]);
+		], $response['embeds'][0]['fields']);
+	}
 
-	});
-
-	it('should have a footer', function () {
+	public function testSubmitWithFooter(): void
+	{
 		$response = Discord::submit(
-			webhook: 'https://discord.com/api/webhooks/xxx/xxx',
+			webhook: static::WEBHOOK,
 			footer: $footer = 'Test footer',
 			dryrun: true
 		);
 
-		expect($response['embeds'][0]['footer']['text'])->toBe($footer);
-	});
+		$this->assertSame($footer, $response['embeds'][0]['footer']['text']);
+	}
 
-	it('should have an image', function () {
+	public function testSubmitWithImage(): void
+	{
 		$response = Discord::submit(
-			webhook: 'https://discord.com/api/webhooks/xxx/xxx',
+			webhook: static::WEBHOOK,
 			image: $image = 'https://example.com/image.jpg',
 			dryrun: true
 		);
 
-		expect($response['embeds'][0]['image']['url'])->toBe($image);
-	});
+		$this->assertSame($image, $response['embeds'][0]['image']['url']);
+	}
 
-	it('should have a thumbnail', function () {
+	public function testSubmitWithThumbnail(): void
+	{
 		$response = Discord::submit(
-			webhook: 'https://discord.com/api/webhooks/xxx/xxx',
+			webhook: static::WEBHOOK,
 			thumbnail: $thumb = 'https://example.com/thumb.jpg',
 			dryrun: true
 		);
 
-		expect($response['embeds'][0]['thumbnail']['url'])->toBe($thumb);
-	});
+		$this->assertSame($thumb, $response['embeds'][0]['thumbnail']['url']);
+	}
 
-	describe('should have a timestamp', function () {
-		it('should be creatable from string', function () {
-			$response = Discord::submit(
-				webhook: 'https://discord.com/api/webhooks/xxx/xxx',
-				timestamp: $ts = '2025-01-17T09:55:24.000Z',
-				dryrun: true
-			);
-
-			expect($response['embeds'][0]['timestamp'])->toBe($ts);
-		});
-
-		it('should be creatable from DateTime object', function () {
-			$response = Discord::submit(
-				webhook: 'https://discord.com/api/webhooks/xxx/xxx',
-				timestamp: new DateTime('2025-01-01'),
-				dryrun: true
-			);
-
-			expect($response['embeds'][0]['timestamp'])->toBe('2025-01-01T00:00:00.000Z');
-		});
-	});
-
-	it('should have a title', function () {
+	public function testSubmitWithTimestampObject(): void
+	{
 		$response = Discord::submit(
-			webhook: 'https://discord.com/api/webhooks/xxx/xxx',
+			webhook: static::WEBHOOK,
+			timestamp: new DateTime('2025-01-01'),
+			dryrun: true
+		);
+
+		$this->assertSame('2025-01-01T00:00:00.000Z', $response['embeds'][0]['timestamp']);
+	}
+
+	public function testSubmitWithTimestampObjectInOtherTimezone(): void
+	{
+		$timestamp = new DateTime('2025-01-01 01:00:00', new DateTimeZone('Europe/Berlin'));
+
+		$response = Discord::submit(
+			webhook: static::WEBHOOK,
+			timestamp: $timestamp,
+			dryrun: true
+		);
+
+		$this->assertSame('2025-01-01T00:00:00.000Z', $response['embeds'][0]['timestamp']);
+
+		// the passed object must not be changed
+		$this->assertSame('Europe/Berlin', $timestamp->getTimezone()->getName());
+	}
+
+	public function testSubmitWithTimestampString(): void
+	{
+		$response = Discord::submit(
+			webhook: static::WEBHOOK,
+			timestamp: $ts = '2025-01-17T09:55:24.000Z',
+			dryrun: true
+		);
+
+		$this->assertSame($ts, $response['embeds'][0]['timestamp']);
+	}
+
+	public function testSubmitWithTitle(): void
+	{
+		$response = Discord::submit(
+			webhook: static::WEBHOOK,
 			title: $title = 'Test',
 			dryrun: true
 		);
 
-		expect($response['embeds'][0]['title'])->toBe($title);
-	});
+		$this->assertSame($title, $response['embeds'][0]['title']);
+	}
 
-	it('should have a username', function () {
+	public function testSubmitWithUsername(): void
+	{
 		$response = Discord::submit(
-			webhook: 'https://discord.com/api/webhooks/xxx/xxx',
+			webhook: static::WEBHOOK,
 			username: $username = 'test user',
 			dryrun: true
 		);
 
-		expect($response['username'])->toBe($username);
-	});
-});
+		$this->assertSame($username, $response['username']);
+	}
+}

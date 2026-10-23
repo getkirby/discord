@@ -3,11 +3,12 @@
 	"description": "Simple Discord webhook wrapper",
 	"license": "MIT",
 	"type": "kirby-plugin",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"keywords": [
 		"kirby",
 		"kirby4",
 		"kirby5",
+		"kirby6",
 		"cms",
 		"webhook",
 		"discord",
@@ -27,43 +28,38 @@
 		"source": "https://github.com/getkirby/discord"
 	},
 	"require": {
-		"php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
-		"getkirby/cms": "^4.0.0",
+		"php": "~8.3.0 || ~8.4.0 || ~8.5.0",
 		"getkirby/composer-installer": "^1.2.1"
 	},
 	"require-dev": {
-		"ergebnis/composer-normalize": "^2.45",
-		"friendsofphp/php-cs-fixer": "^3.68",
-		"pestphp/pest": "^3.7",
-		"phpmd/phpmd": "^2.15",
-		"psalm/phar": "^5.26"
+		"getkirby/cms": "^5.6"
 	},
 	"config": {
 		"allow-plugins": {
-			"ergebnis/composer-normalize": true,
-			"getkirby/composer-installer": true,
-			"pestphp/pest-plugin": true
+			"getkirby/composer-installer": true
 		},
 		"optimize-autoloader": true
 	},
 	"extra": {
 		"installer-name": "discord",
+		"kirby": {
+			"compatible": "^4.0 || ^5.0 || ^6.0"
+		},
 		"kirby-cms-path": false
 	},
 	"scripts": {
 		"analyze": [
-			"@analyze:composer:normalize",
-			"@analyze:composer:validate",
-			"@analyze:fix",
-			"@analyze:phpmd",
+			"@analyze:composer",
 			"@analyze:psalm"
 		],
-		"analyze:composer:normalize": "composer normalize --dry-run",
-		"analyze:composer:validate": "composer validate --strict --no-check-version --no-check-all",
-		"analyze:fix": "./vendor/bin/php-cs-fixer fix --diff --dry-run",
-		"analyze:phpmd": "./vendor/bin/phpmd . ansi phpmd.xml --exclude 'tests/*,vendor/*'",
-		"analyze:psalm": "./vendor/bin/psalm.phar",
-		"fix": "./vendor/bin/php-cs-fixer fix",
-		"test": "./vendor/bin/pest"
+		"analyze:composer": "composer validate --strict --no-check-version --no-check-all",
+		"analyze:psalm": "cpx vimeo/psalm:6.20.1",
+		"ci": [
+			"@fix",
+			"@analyze",
+			"@test"
+		],
+		"fix": "cpx getkirby/php-cs:^0.2 fix",
+		"test": "cpx phpunit/phpunit:12.5.40"
 	}
 }
