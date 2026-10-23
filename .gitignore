@@ -3,6 +3,7 @@
 
 # Cache files
 /.php-cs-fixer.cache
+/.phpunit.cache
 
 # Vendor files
 /vendor

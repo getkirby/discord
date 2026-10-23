@@ -1,39 +1,47 @@
 <?php
 
-use Kirby\Discord\Author;
+namespace Kirby\Discord;
 
-describe('Author', function () {
-	it('from array', function () {
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+
+#[CoversClass(Author::class)]
+class AuthorTest extends TestCase
+{
+	public function testFromArray(): void
+	{
 		$author = Author::from([
 			'name' => 'Test Author'
 		]);
 
-		expect($author->toArray())->toBe([
+		$this->assertSame([
 			'icon_url' => null,
 			'name'     => 'Test Author',
 			'url'      => null,
-		]);
-	});
+		], $author->toArray());
+	}
 
-	it('from null', function () {
-		$author = Author::from(null);
+	public function testFromNull(): void
+	{
+		$this->assertNull(Author::from(null));
+	}
 
-		expect($author)->toBe(null);
-	});
-
-	it('from object', function () {
+	public function testFromObject(): void
+	{
 		$author = Author::from(new Author(name: 'Test Author'));
 
-		expect($author->toArray())->toBe([
+		$this->assertSame([
 			'icon_url' => null,
 			'name'     => 'Test Author',
 			'url'      => null,
-		]);
-	});
+		], $author->toArray());
+	}
 
-	it('should return a proper gravatar URL', function () {
-		$gravatar = Author::gravatar('test@getkirby.com');
-
-		expect($gravatar)->toBe('https://www.gravatar.com/avatar/bbe034b4f830b3b6643c24be59461f03a4077e7f77bf53a1ba674dc0a5ace7e4?d=');
-	});
-});
+	public function testGravatar(): void
+	{
+		$this->assertSame(
+			'https://www.gravatar.com/avatar/bbe034b4f830b3b6643c24be59461f03a4077e7f77bf53a1ba674dc0a5ace7e4?d=',
+			Author::gravatar('test@getkirby.com')
+		);
+	}
+}

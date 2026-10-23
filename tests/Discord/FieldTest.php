@@ -1,28 +1,35 @@
 <?php
 
-use Kirby\Discord\Field;
+namespace Kirby\Discord;
 
-describe('Field', function () {
-	it('from array', function () {
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+
+#[CoversClass(Field::class)]
+class FieldTest extends TestCase
+{
+	public function testFromArray(): void
+	{
 		$field = Field::from([
-			'name' => 'Name',
+			'name'  => 'Name',
 			'value' => 'Value',
 		]);
 
-		expect($field->toArray())->toBe([
+		$this->assertSame([
 			'name'   => 'Name',
 			'value'  => 'Value',
 			'inline' => false,
-		]);
-	});
+		], $field->toArray());
+	}
 
-	it('from object', function () {
+	public function testFromObject(): void
+	{
 		$field = Field::from(new Field(name: 'Name', value: 'Value'));
 
-		expect($field->toArray())->toBe([
+		$this->assertSame([
 			'name'   => 'Name',
 			'value'  => 'Value',
 			'inline' => false,
-		]);
-	});
-});
+		], $field->toArray());
+	}
+}

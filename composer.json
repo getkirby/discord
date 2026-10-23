@@ -32,13 +32,11 @@
 		"getkirby/composer-installer": "^1.2.1"
 	},
 	"require-dev": {
-		"getkirby/cms": "^5.6",
-		"pestphp/pest": "^3.7"
+		"getkirby/cms": "^5.6"
 	},
 	"config": {
 		"allow-plugins": {
-			"getkirby/composer-installer": true,
-			"pestphp/pest-plugin": true
+			"getkirby/composer-installer": true
 		},
 		"optimize-autoloader": true
 	},
@@ -62,6 +60,6 @@
 			"@test"
 		],
 		"fix": "cpx getkirby/php-cs:^0.2 fix",
-		"test": "./vendor/bin/pest"
+		"test": "cpx phpunit/phpunit:12.5.40"
 	}
 }

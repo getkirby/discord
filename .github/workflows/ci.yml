@@ -22,10 +22,19 @@ jobs:
           php: ${{ matrix.php }}
 
       - name: Setup problem matchers
-        run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+        run: |
+          echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+          echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Check Composer platform requirements
         run: composer check-platform-reqs
+
+      - name: Cache PHPUnit results
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ./.phpunit.cache
+          key: phpunit-${{ matrix.php }}-${{ hashFiles('composer.lock') }}
+          restore-keys: phpunit-${{ matrix.php }}-
 
       - name: Run tests
         run: composer run test

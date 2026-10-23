@@ -8,6 +8,6 @@ composer.lock export-ignore
 
 # Tests
 .php-cs-fixer.dist.php export-ignore
-phpunit.xml export-ignore
+phpunit.dist.xml export-ignore
 psalm.xml.dist export-ignore
 /tests export-ignore
