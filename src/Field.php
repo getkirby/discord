@@ -49,8 +49,11 @@ class Field
 	public function toArray(): array
 	{
 		return [
-			'name'   => $this->name,
-			'value'  => $this->value,
+			'name'   => Discord::shorten($this->name, 256),
+			'value'  => match (true) {
+				is_string($this->value) => Discord::shorten($this->value, 1024),
+				default                 => $this->value
+			},
 			'inline' => $this->inline
 		];
 	}

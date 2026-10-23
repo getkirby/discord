@@ -41,4 +41,18 @@ class FieldTest extends TestCase
 		$this->assertFalse((new Field(name: 'Name', value: 'Value'))->isEmpty());
 		$this->assertFalse((new Field(name: 'Name', value: 0))->isEmpty());
 	}
+
+	public function testToArrayWithLongTexts(): void
+	{
+		$field = new Field(
+			name: str_repeat('a', 300),
+			value: str_repeat('a', 1100)
+		);
+
+		$this->assertSame([
+			'name'   => str_repeat('a', 255) . '…',
+			'value'  => str_repeat('a', 1023) . '…',
+			'inline' => false,
+		], $field->toArray());
+	}
 }

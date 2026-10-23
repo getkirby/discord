@@ -60,4 +60,11 @@ class AuthorTest extends TestCase
 			Author::gravatar('test@getkirby.com', 'https://example.com/avatar.png?size=80&v=2')
 		);
 	}
+
+	public function testToArrayWithLongName(): void
+	{
+		$author = new Author(name: str_repeat('a', 300));
+
+		$this->assertSame(str_repeat('a', 255) . '…', $author->toArray()['name']);
+	}
 }

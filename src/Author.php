@@ -53,7 +53,7 @@ class Author
 	{
 		return [
 			'icon_url'  => $this->icon,
-			'name'      => $this->name,
+			'name'      => Discord::shorten($this->name, 256),
 			'url'       => $this->url,
 		];
 	}

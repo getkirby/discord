@@ -24,6 +24,17 @@ class DiscordTest extends TestCase
 		Remote::$defaults['test'] = false;
 	}
 
+	public function testShorten(): void
+	{
+		$this->assertNull(Discord::shorten(null, 5));
+		$this->assertSame('abcde', Discord::shorten('abcde', 5));
+		$this->assertSame('abcd…', Discord::shorten('abcdef', 5));
+
+		// counts characters, not bytes
+		$this->assertSame('äöüß', Discord::shorten('äöüß', 4));
+		$this->assertSame('äöü…', Discord::shorten('äöüßä', 4));
+	}
+
 	public function testSubmit(): void
 	{
 		$response = Discord::submit(
@@ -243,6 +254,37 @@ class DiscordTest extends TestCase
 		$this->assertSame($image, $response['embeds'][0]['image']['url']);
 	}
 
+	public function testSubmitWithLongTexts(): void
+	{
+		$response = Discord::submit(
+			webhook: static::WEBHOOK,
+			author: ['name' => str_repeat('a', 300)],
+			content: str_repeat('a', 2100),
+			description: str_repeat('a', 5000),
+			fields: [
+				[
+					'name'  => str_repeat('a', 300),
+					'value' => str_repeat('a', 1100)
+				]
+			],
+			footer: str_repeat('a', 2100),
+			title: str_repeat('a', 300),
+			username: str_repeat('a', 100),
+			dryrun: true
+		);
+
+		$this->assertSame(str_repeat('a', 1999) . '…', $response['content']);
+		$this->assertSame(str_repeat('a', 79) . '…', $response['username']);
+
+		$embed = $response['embeds'][0];
+		$this->assertSame(str_repeat('a', 255) . '…', $embed['author']['name']);
+		$this->assertSame(str_repeat('a', 4095) . '…', $embed['description']);
+		$this->assertSame(str_repeat('a', 255) . '…', $embed['fields'][0]['name']);
+		$this->assertSame(str_repeat('a', 1023) . '…', $embed['fields'][0]['value']);
+		$this->assertSame(str_repeat('a', 2047) . '…', $embed['footer']['text']);
+		$this->assertSame(str_repeat('a', 255) . '…', $embed['title']);
+	}
+
 	public function testSubmitWithThumbnail(): void
 	{
 		$response = Discord::submit(
@@ -301,6 +343,23 @@ class DiscordTest extends TestCase
 		);
 
 		$this->assertSame($title, $response['embeds'][0]['title']);
+	}
+
+	public function testSubmitWithTooManyFields(): void
+	{
+		$fields = array_map(
+			fn ($index) => ['name' => 'Field ' . $index, 'value' => 'Value'],
+			range(1, 30)
+		);
+
+		$response = Discord::submit(
+			webhook: static::WEBHOOK,
+			fields: $fields,
+			dryrun: true
+		);
+
+		$this->assertCount(25, $response['embeds'][0]['fields']);
+		$this->assertSame('Field 25', $response['embeds'][0]['fields'][24]['name']);
 	}
 
 	public function testSubmitWithUsername(): void
