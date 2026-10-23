@@ -94,7 +94,7 @@ Discord::submit(
 - **[Discord](https://chat.getkirby.com)** – Hang out and meet the community.
 - **[Mastodon](https://mastodon.social/@getkirby)** – Follow us in the Fediverse.
 - **[Bluesky](https://bsky.app/profile/getkirby.com)** – Follow us on Bluesky.
-- **[Instagram](https://www.instagram.com/getkirby/)** – Share your creations: #madewithkirby.
+- **[Bluesky](https://bsky.app/profile/getkirby.com)** – Spread the word.
 
 ---
 
