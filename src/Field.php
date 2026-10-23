@@ -21,7 +21,7 @@ class Field
 	 * Creates a field from an array of constructor arguments
 	 * or passes through an existing field object
 	 */
-	public static function from(self|array $field): static|null
+	public static function from(self|array $field): static
 	{
 		return match (true) {
 			is_array($field) => new static(...$field),
