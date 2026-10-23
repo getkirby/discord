@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <psalm
-	errorLevel="7"
+	errorLevel="1"
 	findUnusedCode="false"
 	findUnusedPsalmSuppress="true"
 	resolveFromConfigFile="true"
@@ -17,7 +17,13 @@
 	</projectFiles>
 
 	<issueHandlers>
+		<!-- Don't require final classes as developers may extend the plugin's classes -->
+		<ClassMustBeFinal errorLevel="suppress" />
+
 		<!-- Don't warn about duplicate array keys as Psalm will throw false positive when unpacking arrays -->
 		<DuplicateArrayKey errorLevel="suppress" />
+
+		<!-- Don't warn about `new static` in the `from()` methods as child classes are expected to keep the constructor signature -->
+		<UnsafeInstantiation errorLevel="suppress" />
 	</issueHandlers>
 </psalm>

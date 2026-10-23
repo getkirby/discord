@@ -43,7 +43,7 @@ class Author
 		$address = strtolower(trim($email));
 		$hash    = hash('sha256', $address);
 
-		return 'https://www.gravatar.com/avatar/' . $hash . '?d=' . $default;
+		return 'https://www.gravatar.com/avatar/' . $hash . '?d=' . ($default ?? '');
 	}
 
 	/**
