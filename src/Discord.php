@@ -69,11 +69,12 @@ class Discord
 			return $data;
 		}
 
-		return Remote::post(
+		return Remote::request(
 			$webhook,
 			[
 				'data'    => json_encode($data),
 				'headers' => ['Content-Type' => 'application/json'],
+				'method'  => 'POST',
 			]
 		);
 	}

@@ -4,6 +4,7 @@ namespace Kirby\Discord;
 
 use DateTime;
 use DateTimeZone;
+use Kirby\Http\Remote;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
@@ -11,6 +12,33 @@ use PHPUnit\Framework\TestCase;
 class DiscordTest extends TestCase
 {
 	protected const string WEBHOOK = 'https://discord.com/api/webhooks/xxx/xxx';
+
+	protected function setUp(): void
+	{
+		// prepare requests without sending them
+		Remote::$defaults['test'] = true;
+	}
+
+	protected function tearDown(): void
+	{
+		Remote::$defaults['test'] = false;
+	}
+
+	public function testSubmit(): void
+	{
+		$response = Discord::submit(
+			webhook: static::WEBHOOK,
+			title: 'Test'
+		);
+
+		$this->assertInstanceOf(Remote::class, $response);
+		$this->assertSame('POST', $response->options['method']);
+		$this->assertSame(static::WEBHOOK, $response->options['url']);
+		$this->assertSame(['Content-Type' => 'application/json'], $response->options['headers']);
+
+		$data = json_decode($response->options['data'], true);
+		$this->assertSame('Test', $data['embeds'][0]['title']);
+	}
 
 	public function testSubmitDryrun(): void
 	{
