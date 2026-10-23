@@ -17,6 +17,9 @@ class Discord
 	/**
 	 * Sends a message with an embed to the webhook;
 	 * returns the request data instead in dryrun mode
+	 *
+	 * @param Author|array{name: string, url?: string|null, icon?: string|null}|null $author
+	 * @param array<Field|array{name: string, value: mixed, inline?: bool}> $fields
 	 */
 	public static function submit(
 		string $webhook,

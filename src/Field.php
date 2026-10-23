@@ -20,6 +20,8 @@ class Field
 	/**
 	 * Creates a field from an array of constructor arguments
 	 * or passes through an existing field object
+	 *
+	 * @param self|array{name: string, value: mixed, inline?: bool} $field
 	 */
 	public static function from(self|array $field): static
 	{

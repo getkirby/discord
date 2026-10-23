@@ -20,6 +20,8 @@ class Author
 	/**
 	 * Creates an author from an array of constructor arguments
 	 * or passes through an existing author object
+	 *
+	 * @param self|array{name: string, url?: string|null, icon?: string|null}|null $author
 	 */
 	public static function from(self|array|null $author): static|null
 	{
