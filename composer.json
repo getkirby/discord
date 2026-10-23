@@ -8,6 +8,7 @@
 		"kirby",
 		"kirby4",
 		"kirby5",
+		"kirby6",
 		"cms",
 		"webhook",
 		"discord",
@@ -28,12 +29,12 @@
 	},
 	"require": {
 		"php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
-		"getkirby/cms": "^4.0.0",
 		"getkirby/composer-installer": "^1.2.1"
 	},
 	"require-dev": {
 		"ergebnis/composer-normalize": "^2.45",
 		"friendsofphp/php-cs-fixer": "^3.68",
+		"getkirby/cms": "^5.6",
 		"pestphp/pest": "^3.7",
 		"psalm/phar": "^5.26"
 	},
@@ -47,6 +48,9 @@
 	},
 	"extra": {
 		"installer-name": "discord",
+		"kirby": {
+			"compatible": "^4.0 || ^5.0 || ^6.0"
+		},
 		"kirby-cms-path": false
 	},
 	"scripts": {
