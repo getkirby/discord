@@ -8,12 +8,15 @@ use Kirby\Http\Remote;
 /**
  * Sends a webhook to a Discord channel
  *
- * @author Kirby Team <mail@getkirby.com>
- * @license MIT
- * @link https://getkirby.com
+ * @copyright Kirby Team <mail@getkirby.com>
+ * @license   https://opensource.org/licenses/MIT
  */
 class Discord
 {
+	/**
+	 * Sends a message with an embed to the webhook;
+	 * returns the request data instead in dryrun mode
+	 */
 	public static function submit(
 		string $webhook,
 		Author|array|null $author = null,
