@@ -32,4 +32,13 @@ class FieldTest extends TestCase
 			'inline' => false,
 		], $field->toArray());
 	}
+
+	public function testIsEmpty(): void
+	{
+		$this->assertTrue((new Field(name: 'Name', value: null))->isEmpty());
+		$this->assertTrue((new Field(name: 'Name', value: ''))->isEmpty());
+		$this->assertTrue((new Field(name: 'Name', value: " \n"))->isEmpty());
+		$this->assertFalse((new Field(name: 'Name', value: 'Value'))->isEmpty());
+		$this->assertFalse((new Field(name: 'Name', value: 0))->isEmpty());
+	}
 }

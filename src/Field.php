@@ -32,6 +32,18 @@ class Field
 	}
 
 	/**
+	 * Checks if the field has no value;
+	 * Discord rejects such fields
+	 */
+	public function isEmpty(): bool
+	{
+		return match (true) {
+			is_string($this->value) => trim($this->value) === '',
+			default                 => $this->value === null
+		};
+	}
+
+	/**
 	 * Converts the field to the format of the Discord API
 	 */
 	public function toArray(): array

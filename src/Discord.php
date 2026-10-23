@@ -64,11 +64,16 @@ class Discord
 				->format('Y-m-d\TH:i:s.v\Z');
 		}
 
+		// Discord rejects fields without a value
+		$fields = array_map(fn ($field) => Field::from($field), $fields);
+		$fields = array_filter($fields, fn ($field) => $field->isEmpty() === false);
+		$fields = array_values($fields);
+
 		$embed = static::filter([
 			'author'      => static::filter(Author::from($author)?->toArray() ?? []),
 			'color'       => $color,
 			'description' => $description,
-			'fields'      => array_map(fn ($field) => Field::from($field)->toArray(), $fields),
+			'fields'      => array_map(fn ($field) => $field->toArray(), $fields),
 			'footer'      => static::filter(['text' => $footer]),
 			'image'       => static::filter(['url'  => $image]),
 			'thumbnail'   => static::filter(['url'  => $thumbnail]),

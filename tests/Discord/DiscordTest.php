@@ -193,6 +193,34 @@ class DiscordTest extends TestCase
 		], $response['embeds'][0]['fields']);
 	}
 
+	public function testSubmitWithFieldsWithoutValue(): void
+	{
+		$response = Discord::submit(
+			webhook: static::WEBHOOK,
+			fields: [
+				['name' => 'Null', 'value' => null],
+				['name' => 'Empty', 'value' => ''],
+				['name' => 'Whitespace', 'value' => '  '],
+				['name' => 'Field A', 'value' => 'Value A'],
+				['name' => 'Zero', 'value' => 0],
+			],
+			dryrun: true
+		);
+
+		$this->assertSame([
+			[
+				'name'   => 'Field A',
+				'value'  => 'Value A',
+				'inline' => false
+			],
+			[
+				'name'   => 'Zero',
+				'value'  => 0,
+				'inline' => false
+			]
+		], $response['embeds'][0]['fields']);
+	}
+
 	public function testSubmitWithFooter(): void
 	{
 		$response = Discord::submit(
