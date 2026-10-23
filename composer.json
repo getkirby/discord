@@ -32,7 +32,6 @@
 		"getkirby/composer-installer": "^1.2.1"
 	},
 	"require-dev": {
-		"ergebnis/composer-normalize": "^2.45",
 		"friendsofphp/php-cs-fixer": "^3.68",
 		"getkirby/cms": "^5.6",
 		"pestphp/pest": "^3.7",
@@ -40,7 +39,6 @@
 	},
 	"config": {
 		"allow-plugins": {
-			"ergebnis/composer-normalize": true,
 			"getkirby/composer-installer": true,
 			"pestphp/pest-plugin": true
 		},
@@ -55,15 +53,16 @@
 	},
 	"scripts": {
 		"analyze": [
-			"@analyze:composer:normalize",
-			"@analyze:composer:validate",
-			"@analyze:fix",
+			"@analyze:composer",
 			"@analyze:psalm"
 		],
-		"analyze:composer:normalize": "composer normalize --dry-run",
-		"analyze:composer:validate": "composer validate --strict --no-check-version --no-check-all",
-		"analyze:fix": "./vendor/bin/php-cs-fixer fix --diff --dry-run",
+		"analyze:composer": "composer validate --strict --no-check-version --no-check-all",
 		"analyze:psalm": "./vendor/bin/psalm.phar",
+		"ci": [
+			"@fix",
+			"@analyze",
+			"@test"
+		],
 		"fix": "./vendor/bin/php-cs-fixer fix",
 		"test": "./vendor/bin/pest"
 	}
